@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Turnero Clínica</title>
+    <link rel="stylesheet" href="/static/estilos.css">
+</head>
+<body>
+
+<h1>Turnero de Clínica</h1>
+
+<form action="/agregar" method="post">
+    <input name="paciente" placeholder="Paciente" required>
+    <input name="medico" placeholder="Médico" required>
+    <input type="date" name="fecha" required>
+    <input type="time" name="hora" required>
+    <button>Guardar turno</button>
+</form>
+
+<hr>
+
+<table>
+    <tr>
+        <th>Paciente</th>
+        <th>Médico</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Acciones</th>
+    </tr>
+
+    {% for t in turnos %}
+    <tr>
+        <td>{{ t[1] }}</td>
+        <td>{{ t[2] }}</td>
+        <td>{{ t[3] }}</td>
+        <td>{{ t[4] }}</td>
+        <td>
+            <a href="/editar/{{ t[0] }}">✏️ Editar</a>
+            |
+            <a href="/eliminar/{{ t[0] }}" onclick="return confirm('¿Eliminar turno?')">🗑️ Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
