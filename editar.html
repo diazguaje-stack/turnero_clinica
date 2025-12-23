@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar turno</title>
+    <link rel="stylesheet" href="/static/estilos.css">
+</head>
+<body>
+
+<h1>Editar turno</h1>
+
+<form action="/actualizar/{{ turno[0] }}" method="post">
+    <input name="paciente" value="{{ turno[1] }}" required>
+    <input name="medico" value="{{ turno[2] }}" required>
+    <input type="date" name="fecha" value="{{ turno[3] }}" required>
+    <input type="time" name="hora" value="{{ turno[4] }}" required>
+    <button>Actualizar</button>
+</form>
+
+<br>
+<a href="/">⬅ Volver</a>
+
+</body>
+</html>
