@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pantalla de turnos</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background:black;
+            color: white;
+        }
+        h1 {
+            font-size: 50px;
+            color: yellow;
+        }
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        th,td{
+            font-size: 40px;
+            padding: 15px;
+            border-bottom: 2px solid white;
+        }
+        tr:first-child{
+            background: red;
+            color: white;
+            font-size: 50px;
+        }
+
+        @keyframes latido {
+            0% { background-color: red; transform: scale(1); }
+            50% { background-color: yellow; transform: scale(1.05); }
+            100% { background-color: red; transform: scale(1); }
+        }
+
+        .alerta {
+            animation: latido 1s ease-in-out 6;
+            color: black;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>Paciente en llamado</h1>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Turno</th>
+            <th>Paciente</th>
+            <th>Consultorio</th>
+        </tr>
+    </thead>
+
+    <tbody id="tabla">
+        <!-- Aquí el JS insertará los llamados -->
+    </tbody>
+</table>
+
+
+
+<script>
+
+let leidos = JSON.parse(localStorage.getItem("turnos_leidos") || "[]");
+
+
+let colaGlobal = [];
+let hablando = false;
+
+async function cargar() {
+    const res = await fetch("/api/llamados");
+    const data = await res.json();
+
+    const tbody = document.getElementById("tabla");
+    tbody.innerHTML = "";
+
+    data.forEach(t => {
+        const tr = document.createElement("tr");
+
+        // 🔥 Si este es el que está siendo llamado → parpadea
+        if (t.activo === 1 || t.activo === true) {
+            tr.classList.add("alerta");
+        }
+
+        tr.innerHTML = `
+            <td>${t.codigo}</td>
+            <td>${t.nombre}</td>
+            <td>${t.consultorio}</td>
+        `;
+
+        tbody.appendChild(tr);
+
+        // cola de voz
+        if (!leidos.includes(t.codigo) && !colaGlobal.find(x => x.codigo === t.codigo)) {
+            colaGlobal.push(t);
+        }
+    });
+
+    procesarCola();
+}
+
+function procesarCola() {
+    if (hablando) return;
+    if (colaGlobal.length === 0) return;
+
+    const t = colaGlobal.shift();
+    hablando = true;
+
+    const texto = `Turno ${t.codigo}. ${t.nombre}. Diríjase al ${t.consultorio}`;
+
+    let repeticiones = 0;
+    const MAX_REP = 3;
+
+    function hablar() {
+        if (repeticiones >= MAX_REP) {
+            fetch("/api/marcar_leido/" + t.id, { method: "POST" })
+
+            leidos.push(t.codigo);
+            localStorage.setItem("turnos_leidos", JSON.stringify(leidos));
+
+            hablando = false;
+            procesarCola(); // pasa al siguiente turno
+            return;
+        }
+
+        const voz = new SpeechSynthesisUtterance(texto);
+        voz.lang = "es-ES";
+        voz.rate = 0.9;
+
+        voz.onend = () => {
+            repeticiones++;
+            setTimeout(hablar, 1000); // espera 1 segundo entre llamados
+        };
+
+        speechSynthesis.speak(voz);
+    }
+
+    hablar(); // inicia la primera vez
+}
+
+// Requiere interacción humana UNA sola vez
+document.body.addEventListener("click", () => {
+    speechSynthesis.resume();
+});
+
+setInterval(cargar, 3000);
+cargar();
+
+
+
+</script>
+
+</body>
+</html>

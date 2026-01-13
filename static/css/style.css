@@ -1,0 +1,97 @@
+h1 {
+    color:black;
+    margin-top: 80px;
+    text-align: center;
+}
+
+html,body{
+  height: 100%;
+  margin: 0;
+}
+
+body {
+    background-color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+.form-barra {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 60px;
+}
+#nombre{
+  width: 200px;
+}
+#documento{
+  width: 150px;
+}
+
+
+/* Posicionamiento */
+.form label{
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form input{
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.button-center {
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+.lista{
+  margin-top: 30px;
+}
+
+.item{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+
+}
+img{
+  width: 200px;
+  height: auto;
+}
+.contenedor{
+  flex: 1;
+}
+
+
+.footer{
+  background: linear-gradient(10deg, #0d6efd, #ffffff);
+  padding: 20px;
+  margin-top: 100px;
+}
+
+@keyframes latido {
+    0%   { transform: scale(1);   }
+    50%  { transform: scale(1.15);}
+    100% { transform: scale(1);   }
+}
+
+@keyframes latido {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.llamando {
+    animation: latido 1s infinite;
+    background: red !important;
+    color: white;
+    font-size: 50px;
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pacientes registrados</title>
+</head>
+<body>
+
+<h1>Pacientes en espera</h1>
+
+<form method="get" action="/lista">
+    <label><strong>Filtrar por médico:</strong></label>
+    <select name="medico" onchange="this.form.submit()">
+        <option value="">Todos</option>
+
+        {% for m in medicos %}
+            <option value="{{ m }}" {% if m == medico_seleccionado %}selected{% endif %}>
+                {{ m }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<br>
+
+
+<table border="1" cellpadding="8">
+<tr>
+    <th>ID</th>
+    <th>Código</th>
+    <th>Nombre</th>
+    <th>Documento</th>
+    <th>Fecha</th>
+    <th>Médico</th>
+    <th>Consultorio</th>
+    <th>Asignar médico</th>
+    <th>Asignar consultorio</th>
+    <th>Llamar</th>
+
+</tr>
+
+{% for t in turnos %}
+<tr>
+    <td>{{ t["id"] }}</td>
+    <td>{{ t["codigo"] }}</td>
+    <td>{{ t["nombre"] }}</td>
+    <td>{{ t["documento"] }}</td>
+    <td>{{ t["fecha"] }}</td>
+    <td>{{t["medico"] or "sin asignar"}}</td>
+    <td>{{t["consultorio"] or "sin asignar"}}</td>
+
+    
+
+    <td>
+        <form method="post" action="/asignar_medico">
+            <input type="hidden" name="id" value="{{t['id']}}">
+            <select name="medico" onchange="this.form.submit()"required>
+                <option value="">seleccione</option>
+                {% for m in medicos %}
+                    <option value="{{m}}" {% if t["medico"]== m %}selected {% endif %}>
+                        {{ m }}
+                    </option>
+
+                {% endfor %}
+            </select>
+
+        </form>
+    </td>
+
+    <td>
+        <form method="post" action="/asignar_consultorio">
+            <input type="hidden" name="id" value="{{ t['id'] }}">
+            <select name="consultorio" onchange="this.form.submit()"required>
+                <option value="">Seleccione</option>
+                {% for c in consultorios %}
+                    <option value="{{ c }}" {% if t["consultorio"] == c %}selected {% endif %}>
+                        {{ c }}
+                    </option>
+                {% endfor %}
+            </select>
+
+        </form>
+    </td>
+
+        <td>
+        {% if t["medico"] and t["consultorio"] %}
+            <form method="post" action="/llamar">
+                <input type="hidden" name="id" value="{{ t['id'] }}">
+                <input type="hidden" name="medico" value="{{ medico_seleccionado or '' }}">
+                <button type="submit">📢 Llamar</button>
+            </form>
+        {% else %}
+            <span style="color:gray"> Asigne datos</span>
+        {% endif %}
+        </td>
+
+</tr>
+{% endfor %}
+</table><br><br>
+    
+<div class="button-center">
+    <a href="/">
+        <button type="button">Volver al inicio</button><br><br>
+    </a>
+    <a href="/pantalla" target="_blank">
+        <button type="button">ir a pantalla</button><br><br>
+    </a>
+    <a href="/admin">
+        <button type="button">ir a administrador</button>
+
+    </a>
+
+</div>
+
+</body>
+</html>

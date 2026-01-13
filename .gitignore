@@ -1,0 +1,5 @@
+_pycache_/
+*.pyc
+
+#Base de datos local
+*.db

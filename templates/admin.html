@@ -1,0 +1,61 @@
+<h1>Panel Administrativo</h1>
+
+<table border="1" width="100%">
+<tr>
+    <th width="50%">MÉDICOS</th>
+    <th width="50%">CONSULTORIOS</th>
+</tr>
+
+<tr>
+<td valign="top">
+
+<h3>Agregar médico</h3>
+<form method="post" action="/agregar_medico">
+    <input name="nombre" required placeholder="Nombre del médico">
+    <button>Agregar</button>
+</form>
+
+<table border="1" width="100%">
+{% for m in medicos %}
+<tr>
+    <td>{{m["nombre"]}}</td>
+    <td width="80">
+        <a href="/borrar_medico/{{m['id']}}">
+            <button type="button">Eliminar</button>
+        </a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+</td>
+
+<td valign="top">
+
+<h3>Agregar consultorio</h3>
+<form method="post" action="/agregar_consultorio">
+    <input name="nombre" required placeholder="Consultorio">
+    <button>Agregar</button>
+</form>
+
+<table border="1" width="100%">
+{% for c in consultorios %}
+<tr>
+    <td>{{c["nombre"]}}</td>
+    <td width="80">
+        <a href="/borrar_consultorio/{{c['id']}}">
+            <button type="button">Eliminar</button>
+        </a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+</td>
+</tr>
+</table>
+
+<br>
+<a href="/lista">
+    <button type="button">Volver al sistema</button>
+</a>

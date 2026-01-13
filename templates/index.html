@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Nuevo Proyecto</title>
+    
+    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+</head>
+<body>
+    <div class="contenedor">
+        <header>
+            <img src="{{url_for('static',filename='css/img/CANCEROLOGIA2.png')}}">
+        </header>
+
+        <h1>Datos de la persona</h1>
+
+        <form class="form-barra" id="formulario">
+            <div class="left">
+                <label for="nombre">Nombre:</label>
+                <input type="text"id="nombre"name="nombre" placeholder="ingrese el nombre">
+            </div>
+
+            <div class="center">
+                <label for="documento">N° Documento</label>
+                <input type="text" id="documento" name="documento" placeholder="ingrese el número"
+                inputmode="numeric" pattern="[0-9]+" maxlength="12">
+            </div>
+
+            
+            <div class="button-center">
+                <button type="submit">Registrar</button>
+                <a href="/lista">
+                    <button type="button">Pacientes en espera</button>
+                </a>
+            </div>    
+        </form>
+
+        <div class="lista"id="lista"></div>
+    
+    </div>
+
+    <footer class="footer"> 
+        &copy; 2026 Clinica de Cancerología
+    </footer>
+    
+    <script src="{{url_for('static',filename='css/js/almacenamiento.js')}}"></script>
+</body>
+</html>
