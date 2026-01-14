@@ -3,12 +3,12 @@ from bd import get_db
 import random
 import string
 import os
-import sqlite3
+
 
 import sqlite3
 
 def init_db():
-    conn = sqlite3.connect("turnos.db")
+    conn = get_db()
     cursor = conn.cursor()
 
     # TABLA TURNOS
