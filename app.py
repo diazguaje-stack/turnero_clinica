@@ -59,6 +59,7 @@ def init_db():
     conn.close()
 
 app=Flask(__name__)
+init_db()
 
 @app.after_request
 def no_cache(response):
