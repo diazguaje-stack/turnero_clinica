@@ -5,6 +5,28 @@ import string
 import os
 import sqlite3
 
+import sqlite3
+
+def init_db():
+    conn = sqlite3.connect("turnos.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS turnos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT,
+        documento TEXT,
+        fecha TEXT,
+        medico TEXT,
+        consultorio TEXT,
+        codigo TEXT
+    )
+    """)
+    conn.commit()
+    conn.close()
+
+init_db()
+
+
 app=Flask(__name__)
 
 @app.after_request
