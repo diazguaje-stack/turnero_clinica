@@ -10,22 +10,53 @@ import sqlite3
 def init_db():
     conn = sqlite3.connect("turnos.db")
     cursor = conn.cursor()
+
+    # TABLA TURNOS
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS turnos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre TEXT,
         documento TEXT,
-        fecha TEXT,
+        fecha TEXT DEFAULT CURRENT_TIMESTAMP,
         medico TEXT,
         consultorio TEXT,
-        codigo TEXT
+        codigo TEXT,
+        estado TEXT DEFAULT 'en_espera'
     )
     """)
+
+    # TABLA MEDICOS
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS medicos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT UNIQUE
+    )
+    """)
+
+    # TABLA CONSULTORIOS
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS consultorios (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT UNIQUE
+    )
+    """)
+
+    # TABLA LLAMADO ACTUAL
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS llamado_actual (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT,
+        documento TEXT,
+        codigo TEXT,
+        consultorio TEXT,
+        fecha TEXT DEFAULT CURRENT_TIMESTAMP,
+        activo INTEGER DEFAULT 1,
+        hablado INTEGER DEFAULT 0
+    )
+    """)
+
     conn.commit()
     conn.close()
-
-init_db()
-
 
 app=Flask(__name__)
 
